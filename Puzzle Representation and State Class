@@ -1,0 +1,47 @@
+from queue import PriorityQueue
+import heapq
+
+class PuzzleState:
+    def __init__(self, board, parent=None, move=None, depth=0, cost=0):
+        self.board = board
+        self.parent = parent
+        self.move = move
+        self.depth = depth
+        self.cost = cost
+        self.key = ''.join(str(tile) for tile in board)
+
+    def __lt__(self, other):
+        return self.cost < other.cost
+
+    def get_possible_moves(self):
+        moves = []
+        index = self.board.index(0)
+        x, y = index // 3, index % 3
+
+        if x > 0: 
+            new_board = self.board[:]
+            new_board[index], new_board[index - 3] = new_board[index - 3], new_board[index]
+            moves.append(PuzzleState(new_board, self, 'Up', self.depth + 1, self.cost + 1))
+
+        if x < 2:  
+            new_board = self.board[:]
+            new_board[index], new_board[index + 3] = new_board[index + 3], new_board[index]
+            moves.append(PuzzleState(new_board, self, 'Down', self.depth + 1, self.cost + 1))
+
+        if y > 0: 
+            new_board = self.board[:]
+            new_board[index], new_board[index - 1] = new_board[index - 1], new_board[index]
+            moves.append(PuzzleState(new_board, self, 'Left', self.depth + 1, self.cost + 1))
+
+        if y < 2: 
+            new_board = self.board[:]
+            new_board[index], new_board[index + 1] = new_board[index + 1], new_board[index]
+            moves.append(PuzzleState(new_board, self, 'Right', self.depth + 1, self.cost + 1))
+
+        return moves
+
+    def is_goal(self, goal):
+        return self.board == goal
+
+def misplaced_tile_heuristic(board, goal):
+    return sum(1 for i in range(9) if board[i] != 0 and board[i] != goal[i])

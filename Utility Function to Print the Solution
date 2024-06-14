@@ -1,0 +1,9 @@
+def print_solution(solution):
+    moves = []
+    current = solution
+    while current.parent is not None:
+        moves.append(current.move)
+        current = current.parent
+    moves.reverse()
+    print("Solution path:", moves)
+    print("Number of moves:", len(moves))

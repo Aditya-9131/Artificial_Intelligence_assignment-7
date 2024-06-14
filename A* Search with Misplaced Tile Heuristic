@@ -1,0 +1,26 @@
+def a_star(start, goal, heuristic):
+    open_list = []
+    heapq.heappush(open_list, (0, start))
+    visited = set()
+    visited.add(start.key)
+    nodes_expanded = 0
+    max_queue_length = 1
+    nodes_generated = 1
+
+    while open_list:
+        _, current = heapq.heappop(open_list)
+        nodes_expanded += 1
+
+        if current.is_goal(goal):
+            return current, {'nodes_expanded': nodes_expanded, 'nodes_generated': nodes_generated, 'max_queue_length': max_queue_length}
+
+        for move in current.get_possible_moves():
+            if move.key not in visited:
+                move.cost = move.depth + heuristic(move.board, goal)
+                heapq.heappush(open_list, (move.cost, move))
+                visited.add(move.key)
+                nodes_generated += 1
+
+        max_queue_length = max(max_queue_length, len(open_list))
+
+    return None, {'nodes_expanded': nodes_expanded, 'nodes_generated': nodes_generated, 'max_queue_length': max_queue_length}

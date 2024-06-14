@@ -1,0 +1,25 @@
+def depth_limited_search(node, goal, limit, stats):
+    if node.is_goal(goal):
+        return node
+    elif limit == 0:
+        return None
+    else:
+        cutoff_occurred = False
+        for move in node.get_possible_moves():
+            stats['nodes_generated'] += 1
+            result = depth_limited_search(move, goal, limit - 1, stats)
+            if result is None:
+                cutoff_occurred = True
+            else:
+                return result
+        return None if cutoff_occurred else False
+
+def iterative_deepening_search(start, goal):
+    depth = 0
+    stats = {'nodes_expanded': 0, 'nodes_generated': 1, 'max_queue_length': 1}
+    while True:
+        result = depth_limited_search(start, goal, depth, stats)
+        if result is not None:
+            return result, stats
+        depth += 1
+        stats['nodes_expanded'] += 1

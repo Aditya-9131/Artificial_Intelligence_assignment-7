@@ -1,0 +1,22 @@
+# Define the start and goal states
+start_state = [8, 2, 0, 3, 4, 7, 5, 1, 6]
+goal_state = [1, 2, 3, 4, 5, 6, 7, 8, 0]
+
+start = PuzzleState(start_state)
+goal = goal_state
+
+# Run Iterative Deepening Search
+solution_ids, stats_ids = iterative_deepening_search(start, goal)
+print("Iterative Deepening Search (IDS):")
+print_solution(solution_ids)
+print("Nodes expanded:", stats_ids['nodes_expanded'])
+print("Nodes generated:", stats_ids['nodes_generated'])
+print("Max queue length:", stats_ids['max_queue_length'])
+
+# Run A* with Misplaced Tile Heuristic
+solution_astar, stats_astar = a_star(start, goal, misplaced_tile_heuristic)
+print("\nA* Search with Misplaced Tile Heuristic:")
+print_solution(solution_astar)
+print("Nodes expanded:", stats_astar['nodes_expanded'])
+print("Nodes generated:", stats_astar['nodes_generated'])
+print("Max queue length:", stats_astar['max_queue_length'])
